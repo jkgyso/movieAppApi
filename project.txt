@@ -1,0 +1,75 @@
+Objective: ExpressJS API - Movie Catalog System
+
+1. What is the main objective of the project?
+	- ExpressJS API - Movie Catalog System with Simple CRUD functionalities
+2. Who are the target users of the application?
+	- Movie Catalog System application users
+3. What are the core features or functionalities required?
+	- Basic CRUD operations for managing movie catalog system (Create, Read, Update, Delete).
+        - All users ability to retrieve a list of all movie documents.
+        - All users ability to retrieve a movie by its ID. 
+		- Authenticated user ability to add new comments to movies.
+		- Authenticated user ability to retrieve comments by its movie ID. 
+		- Admin user ability to create/add a movie document.
+        - Admin user ability to update an existing movie document.
+		- Admin user ability to delete a workout document.
+4. What data will the application need to store and manage?
+	- Movie
+		- title
+		- director
+		- year
+		- description
+        - genre 
+        - comments 
+
+	- User information 
+		- email
+		- password
+        - mobileNo
+
+5. Are there any specific technical requirements or constraints?
+	- Express.js API.
+	- MongoDB with Mongoose for data storage and management.
+	- RESTful Architecture.
+6. What are the security and authentication requirements?
+	- Token-based Authentication (JWT).
+	- Brcypt hash
+7. What are your routes and controllers?
+
+	Routes:
+
+	User:
+	POST /users/login - User login route.
+	POST /users/register - User registration route.
+
+	Movie Routes:
+
+    All Users: 
+    GET /movies/getMovies - Retrieve all movies.
+    GET /movies/getMovie/:id - Retrieve a movie by its ID. 
+
+    Authenticated User: 
+    PATCH /movies/addComment/:id - Add a comment to a movie by its ID. 
+    GET /movies/getComments/:id - Retrieve comments by its movie ID. 
+
+    Admin User: 
+	POST /movies/addMovie - Add a new movie.
+    PATCH /movies/updateMovie/:id - Update an existing movie by its id.
+	DELETE /movies/deleteMovie/:id - Delete a movie item by its ID.
+
+	Controllers:
+
+	User Controller:
+
+	loginUser
+	registerUser
+
+    Movie Controller:
+
+	getMovies
+	getMovie
+    addComment
+    getComments
+    addMovie
+    updateMovie
+    deleteMovie
