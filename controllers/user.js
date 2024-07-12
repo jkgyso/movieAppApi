@@ -2,28 +2,36 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const auth = require('../auth');
 
-module.exports.registerUser = (req, res) => {
-    let newUser = new User({
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 10),
-        mobileNo: req.body.mobileNo
-    });
+module.exports.registerUser = async (req, res) => {
+    try {
+        // Check if the email already exists
+        const existingUser = await User.findOne({ email: req.body.email });
+        if (existingUser) {
+            return res.status(400).send({ error: 'Email already exists' });
+        }
 
-    if (!req.body.email.includes("@")) {
-        return res.status(400).send({ error: 'Email invalid' });
-    }
-    else if (req.body.mobileNo.length !== 11) {
-        return res.status(400).send({ error: 'Mobile number invalid' });
-    }
-    else if (req.body.password.length < 8) {
-        return res.status(400).send({ error: 'Password must be at least 8 characters' });
-    } else {
-        return newUser.save()
-            .then(user => res.status(201).send({ message: 'Registered Successfully' }))
-            .catch(saveErr => {
-                console.error('Error in saving the user: ', saveErr);
-                return res.status(500).send({ error: 'Error in Save' });
-            });
+        // Validate inputs
+        if (!req.body.email.includes("@")) {
+            return res.status(400).send({ error: 'Email invalid' });
+        } else if (req.body.mobileNo.length !== 11) {
+            return res.status(400).send({ error: 'Mobile number invalid' });
+        } else if (req.body.password.length < 8) {
+            return res.status(400).send({ error: 'Password must be at least 8 characters' });
+        }
+
+        // Create a new user
+        let newUser = new User({
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 10),
+            mobileNo: req.body.mobileNo
+        });
+
+        // Save the new user
+        const savedUser = await newUser.save();
+        res.status(201).send({ message: 'Registered Successfully' });
+    } catch (error) {
+        console.error('Error in saving the user: ', error);
+        res.status(500).send({ error: 'Error in Save' });
     }
 };
 
